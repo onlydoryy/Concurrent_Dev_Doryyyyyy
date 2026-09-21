@@ -6,6 +6,8 @@ Open the main project folder in terminal.
 
 Next run one exercise at a time using these commands:
 
+cd "Lab Three"
+
 go run ./atomic
 go run ./mutex
 go run ./sem-ex-collatz-conjecture
