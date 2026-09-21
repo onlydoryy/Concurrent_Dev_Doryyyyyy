@@ -39,3 +39,17 @@ func main() {
 	fmt.Println(total.Load())
 
 }
+
+/* Output:
+go Routine  0
+go Routine  1
+go Routine  2
+go Routine  3
+go Routine  4
+go Routine  5
+go Routine  6
+go Routine  7
+go Routine  8
+go Routine  9
+10000
+*/

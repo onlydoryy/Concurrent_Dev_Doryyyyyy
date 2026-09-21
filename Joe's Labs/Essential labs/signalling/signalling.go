@@ -42,3 +42,10 @@ func main() {
 	wg.Wait() //wait here until everyone (10 go routines) is done
 
 }
+
+/* Output:
+StuffOne - Part A
+StuffTwo - Part A
+StuffTwo - PartB
+StuffOne - PartB
+*/

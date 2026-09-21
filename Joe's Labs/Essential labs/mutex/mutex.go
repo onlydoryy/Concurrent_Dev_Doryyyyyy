@@ -45,3 +45,17 @@ func main() {
 	wg.Wait() //wait here until everyone (10 go routines) is done
 	fmt.Println(total)
 }
+
+/* Output:
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10000
+*/
