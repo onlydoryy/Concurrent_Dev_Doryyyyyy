@@ -1,16 +1,12 @@
-// Dining Philosophers Template Code
+
+// Dining Philosophers Problem
 // Author: Joseph Kehoe
 // Created: 21/10/24
-//GPL Licence
-// MISSING:
-// 1. Readme
-// 2. Full licence info.
-// 3. Comments
-// 4. It can Deadlock!
-///////////////////////////////////////////////////////////////////////////////////////
-//Dorian Nowacki
-//C00288613
-//05-10-2026
+// GPL Licence
+//
+// Dorian Nowacki
+// C00288613
+// 02-11-2026
 
 package main
 
@@ -24,20 +20,25 @@ import (
 func think(index int) {
 	var X time.Duration
 	X = time.Duration(rand.IntN(5))
-	time.Sleep(X * time.Second) //wait random time amount
-	fmt.Println("Phil: ", index, "was thinking")
+	time.Sleep(X * time.Second)
+	fmt.Println("Phil:", index, "was thinking")
 }
 
 func eat(index int) {
 	var X time.Duration
 	X = time.Duration(rand.IntN(5))
-	time.Sleep(X * time.Second) //wait random time amount
-	fmt.Println("Phil: ", index, "was eating")
+	time.Sleep(X * time.Second)
+	fmt.Println("Phil:", index, "was eating")
 }
 
 func getForks(index int, forks map[int]chan bool) {
-	forks[index] <- true
-	forks[(index+1)%5] <- true
+	if index == 4 {
+		forks[(index+1)%5] <- true
+		forks[index] <- true
+	} else {
+		forks[index] <- true
+		forks[(index+1)%5] <- true
+	}
 }
 
 func putForks(index int, forks map[int]chan bool) {
@@ -46,27 +47,33 @@ func putForks(index int, forks map[int]chan bool) {
 }
 
 func doPhilStuff(index int, wg *sync.WaitGroup, forks map[int]chan bool) {
-	for {
+	defer wg.Done()
+
+	for i := 0; i < 5; i++ {
 		think(index)
 		getForks(index, forks)
 		eat(index)
 		putForks(index, forks)
 	}
-	wg.Done()
 }
 
 func main() {
 	var wg sync.WaitGroup
+
 	philCount := 5
 	wg.Add(philCount)
 
 	forks := make(map[int]chan bool)
+
 	for k := range philCount {
 		forks[k] = make(chan bool, 1)
-	} //set up forks
+	} // Set up forks
+
 	for N := range philCount {
 		go doPhilStuff(N, &wg, forks)
-	} //start philosophers
-	wg.Wait() //wait here until everyone (10 go routines) is done
+	} // Start philosophers
 
-} //main
+	wg.Wait() // Wait until all five goroutines finish
+
+	fmt.Println("All philosophers have finished eating.")
+}
