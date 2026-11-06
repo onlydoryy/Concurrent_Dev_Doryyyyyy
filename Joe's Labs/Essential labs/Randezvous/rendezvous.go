@@ -53,7 +53,7 @@ func main() {
 		<-aArrived //A's are waiting for B
 	}
 	for range threadCount {
-		<-bArrived //B's are sending a signal to all waiting A's
+		bArrived <- struct{}{} // Release each waiting goroutine
 	}
 
 	wg.Wait() //wait here until everyone (10 go routines) is done
